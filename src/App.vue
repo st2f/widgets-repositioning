@@ -1,8 +1,86 @@
+<template>
+
+  <div class="">
+    <GridLayout
+      v-model:layout="layout"
+      :row-height="30"
+       :is-bounded="bounded"
+      :vertical-compact="false"
+      prevent-collision
+    >
+      <template #item="{ item }">
+        <div v-for="x in [1,2,3,4]" :key="x">item {{ item.i }}</div>
+        <!-- {{ `${item.i}${item.static ? '- Static' : ''}` }} -->
+      </template>
+    </GridLayout>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <template v-for="box in boxes" :key="box.id">
+        <Widget :box="box" :class="box.style" />
+      </template>
+    </div>
+  </div>
+
+</template>
+
+
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { GridLayout, GridItem } from 'grid-layout-plus'
+import Widget from './assets/Widget.vue'
+
+const boxes = [
+  {
+    id: 1,
+    position: 1,
+    style: "col-3",
+    text: "Lorem ipsum"
+  },
+  {
+    id: 2,
+    position: 2,
+    style: "col-3",
+    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum deserunt voluptatum magnam totam"
+  },
+  {
+    id: 3,
+    position: 3,
+    style: "col-3",
+    text: "Lorem ipsum"
+  },
+  {
+    id: 4,
+    position: 4,
+    style: "col-6",
+    text: "Lorem ipsum"
+  },
+  {
+    id: 5,
+    position: 1,
+    style: "col-4",
+    text: "Lorem ipsum"
+  },
+  {
+    id: 6,
+    position: 2,
+    style: "col-4",
+    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum deserunt voluptatum magnam totam"
+  },
+  {
+    id: 7,
+    position: 3,
+    style: "col-4",
+    text: "Lorem ipsum"
+  }
+
+]
 
 // based on a pre-defined dashboard, show (re-position) only the authorized widgets
+
+const responsive = ref(true)
+const bounded = ref(true)
 
 const originalWidgets = [
   { x: 0, y: 0, w: 2, h: 2, i: '0' },
@@ -106,18 +184,13 @@ function removeWidgetAndReposition(matrix, id) {
 }
 </script>
 
-<template>
-  <GridLayout v-model:layout="layout" :row-height="30">
-    <template #item="{ item }">
-      <span class="text">{{ `${item.i}${item.static ? '- Static' : ''}` }}</span>
-    </template>
-  </GridLayout>
-</template>
 
 <style lang="scss" scoped>
 //@import './assets/base.scss';
+
 .vgl-layout {
   background-color: #eee;
+
 }
 
 :deep(.vgl-item:not(.vgl-item--placeholder)) {
@@ -133,13 +206,4 @@ function removeWidgetAndReposition(matrix, id) {
   background-color: #cce;
 }
 
-.text {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  font-size: 24px;
-  text-align: center;
-}
 </style>
